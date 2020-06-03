@@ -3,7 +3,7 @@ package com.vinay.demofilesystem.files
 import com.vinay.demofilesystem.filesystem.FilesystemException
 
 
-class File(override val parentPath: String, override val name: String, contents: String)
+class File(override val parentPath: String, override val name: String,val contents: String)
   extends DirEntry (parentPath, name){
 
   override def asDirectory: Directory =

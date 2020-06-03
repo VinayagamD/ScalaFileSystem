@@ -44,7 +44,7 @@ class Cd(dir: String) extends Command {
       else {
         val nextDir = currentDirectory.findEntry(path.head)
         if(nextDir == null || !nextDir.isDirectory) null
-        else findEntryHelper(nextDir, path.tail)
+        else findEntryHelper(nextDir.asDirectory, path.tail)
       }
 
     @tailrec
