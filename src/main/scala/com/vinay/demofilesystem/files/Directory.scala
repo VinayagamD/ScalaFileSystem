@@ -1,5 +1,7 @@
 package com.vinay.demofilesystem.files
 
+import com.vinay.demofilesystem.filesystem.FilesystemException
+
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry])
   extends DirEntry(parentPath,name) {
   def hasEntry(name: String): Boolean =
@@ -13,13 +15,13 @@ class Directory(override val parentPath: String, override val name: String, val 
     if(path.isEmpty) this
     else findEntry(path.head).asDirectory.findDescendant(path.tail)
 
-  def addEntry(newEntry: Directory): Directory =
+  def addEntry(newEntry: DirEntry): Directory =
     new Directory(parentPath, name, contents :+ newEntry)
 
-  def findEntry(entryName: String) : DirEntry = {
-    def findEntryHelper(name: String, contentList: List[DirEntry]) : DirEntry=
+  def findEntry(entryName: String) : Directory = {
+    def findEntryHelper(name: String, contentList: List[DirEntry]) : Directory=
       if(contentList.isEmpty) null
-      else if( contentList.head.name.equals(name)) contentList.head
+      else if( contentList.head.name.equals(name)) contentList.head.asDirectory
       else findEntryHelper(name, contentList.tail)
 
     findEntryHelper(entryName, contents)
@@ -31,6 +33,8 @@ class Directory(override val parentPath: String, override val name: String, val 
   override def asDirectory: Directory = this
 
   override def getType: String = "Directory"
+
+  override def asFile: File = throw new FilesystemException("A file cannot be converted to a directory!")
 }
 
 object Directory {
