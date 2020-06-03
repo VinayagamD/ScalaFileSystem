@@ -16,14 +16,11 @@ object Command {
   val TOUCH = "touch"
   val CD = "cd"
   val RM = "rm"
+  val ECHO = "echo"
 
   def emptyCommand : Command = (state: State) => state
 
-  def incompleteCommand(name: String) : Command = new Command {
-    override def apply(state: State): State =
-      state.setMessage(name + " incomplete command!")
-  }
-
+  def incompleteCommand(name: String) : Command = (state: State) => state.setMessage(name + " incomplete command!")
 
 
   def from(input: String) : Command = {
@@ -45,6 +42,9 @@ object Command {
     } else if(RM.equals(tokens(0))){
       if(tokens.length < 2) incompleteCommand(RM)
       else new Rm(tokens(1))
+    } else if (ECHO.equals(tokens(0))){
+      if(tokens.length < 2) incompleteCommand(ECHO)
+      else new Echo(tokens.tail)
     }
     else new UnknownCommand
   }
